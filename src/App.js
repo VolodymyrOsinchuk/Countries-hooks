@@ -7,6 +7,7 @@ import {
   CardActionArea,
   CardContent,
   CardMedia,
+  TextField,
   Typography
 } from "@material-ui/core";
 
@@ -36,19 +37,15 @@ function App() {
   const classes = useStyles();
   const [items, setItems] = useState([])
   const [name, setName] = useState("france");
-  // const [capital, setCapital] = useState("");
-  // const [flag, setFlag] = useState("");
-  // const [population, setPopulation] = useState("");
-  // const [region, setRegion] = useState("");
   
   useEffect(() => {
     function getCountry(country) {
       console.log('country >>>', country)
       fetch(`https://restcountries.eu/rest/v2/name/${country}`)
       .then(res => res.json())
-      .then(countryAPI => {
-        console.log('countryAPI', countryAPI)
-        setItems(countryAPI)
+      .then(res => {
+        console.log('countryAPI', res)
+        setItems(res)
       })
     }
     
@@ -56,10 +53,34 @@ function App() {
 
   }, [name])
 
+  function handleChange(event) {
+    setName(event.target.value)
+  }
+
+  console.log('items', items)
   return (
     <div className={classes.root}>
       <h1 className={classes.head}>Country selector</h1>
-        <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
+      <form>
+        <TextField 
+          label="Country"
+          variant="outlined"
+          value={name}
+          onChange={handleChange}
+        />
+        <Button
+          color="primary"
+          variant="contained"
+          style={{ height: 54}}
+        >
+          Search
+        </Button>
+      </form>
+        <ButtonGroup 
+          variant="contained" 
+          color="primary" 
+          aria-label="contained primary button group"
+        >
           <Button 
             className={classes.button}
             onClick={() => {
@@ -87,25 +108,25 @@ function App() {
         </ButtonGroup>
         <Card>
           <CardActionArea>
-          {items.map((country, index) => {
+          {items.map((count, index) => {
             return (
               <div key={index}>
               <CardMedia 
               className={classes.media}
-              image={country.flag}
+              image={count.flag}
             />
             <CardContent>
               <Typography variant="h5" component="h5">
-                Country: {country.name}
+                Country: {count.name}
               </Typography>
               <Typography variant="h5" component="h5">
-                Capital: {country.capital}
+                Capital: {count.capital}
               </Typography>
               <Typography variant="h6" component="h6">
-                Region: {country.region}
+                Region: {count.region}
               </Typography>
               <Typography variant="h6" component="h6">
-                Population: {country.population}
+                Population: {count.population}
               </Typography>
             </CardContent>
               </div>
