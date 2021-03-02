@@ -36,22 +36,22 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   const classes = useStyles();
   const [items, setItems] = useState([])
-  const [name, setName] = useState("france");
+  const [name, setName] = useState("");
   
   useEffect(() => {
-    function getCountry(country) {
-      console.log('country >>>', country)
-      fetch(`https://restcountries.eu/rest/v2/name/${country}`)
-      .then(res => res.json())
-      .then(res => {
-        console.log('countryAPI', res)
-        setItems(res)
-      })
-    }
-    
-    getCountry(name)
+    getCountry("")
+  }, [])
 
-  }, [name])
+  function getCountry(country) {
+    console.log('country >>>', country)
+    fetch(`https://restcountries.eu/rest/v2/name/${country}`)
+    .then(res => res.json())
+    .then(res => {
+      console.log('countryAPI', res)
+      setItems(res)
+    })
+  }
+
 
   function handleChange(event) {
     setName(event.target.value)
@@ -72,11 +72,15 @@ function App() {
           color="primary"
           variant="contained"
           style={{ height: 54}}
+          onClick={() => {
+             getCountry(name)
+            }
+          }
         >
           Search
         </Button>
       </form>
-        <ButtonGroup 
+        {/* <ButtonGroup 
           variant="contained" 
           color="primary" 
           aria-label="contained primary button group"
@@ -105,7 +109,7 @@ function App() {
           >
             Croatia  
           </Button>
-        </ButtonGroup>
+        </ButtonGroup> */}
         <Card>
           <CardActionArea>
           {items.map((count, index) => {
